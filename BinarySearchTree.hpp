@@ -407,20 +407,15 @@ private:
     if (node == nullptr){
       return nullptr;
     }
-    if (!less(node->datum, query) && !less(query, node->datum)){
+    else if (!less(node->datum, query) && !less(query, node->datum)){
       return node;
     }
-    Node *x;
-    Node *y;
-    x = find_impl(node->left, query, less);
-    y = find_impl(node->right, query, less);
-    if (x){
-      return x;
+    else if (less(node->datum, query)){
+      return find_impl(node->left, query, less);
     }
-    if (y){
-      return y;
+    else{
+      return find_impl(node->right, query, less);
     }
-    return nullptr;
   }
 
   // REQUIRES: item is not already contained in the tree rooted at 'node'
@@ -464,14 +459,12 @@ private:
   // HINT: You don't need to compare any elements! Think about the
   //       structure, and where the smallest element lives.
   static Node * min_element_impl(Node *node) {
-    if (node == nullptr){
-      return nullptr;
-    }
-    Node * x = min_element_impl(node->left);
-    if (x == nullptr){
+    if (node->left == nullptr){
       return node;
     }
-    return x;
+    else{
+      return min_element_impl(node->left);
+    }
     
   }
 
@@ -481,14 +474,12 @@ private:
   // HINT: You don't need to compare any elements! Think about the
   //       structure, and where the largest element lives.
   static Node * max_element_impl(Node *node) {
-    if (node == nullptr){
-      return nullptr;
-    }
-    Node * x = max_element_impl(node->right);
-    if (x == nullptr){
+    if (node->right == nullptr){
       return node;
     }
-    return x;
+    else {
+      return max_element_impl(node->right);
+    }
   }
 
 
