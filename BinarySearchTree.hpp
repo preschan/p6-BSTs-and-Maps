@@ -439,20 +439,20 @@ private:
   //       template, NOT according to the < operator. Use the "less"
   //       parameter to compare elements.
   static Node * insert_impl(Node *node, const T &item, Compare less) {
-    if(node == nullptr){
-      return nullptr;
+    Node *z = new Node();
+    if(node==nullptr){
+      z->datum = item;
+      z->left = nullptr;
+      z->right = nullptr;
+      return z;
     }
-    Node y = new Node();
-    Node * x = insert_impl(node->left, item, less);
-    if (x == nullptr && !less(node->datum , x->datum)){
-      y->datum = item;
-      node->left = y;
-      x = y;
-      return x;
+    if (less(node->datum, item)){
+      node->right = insert_impl(node->right, item, less);
     }
     else{
-      return nullptr
+      node->left = insert_impl(node->left, item, less);
     }
+    return node;
 
   }
 
@@ -468,13 +468,10 @@ private:
       return nullptr;
     }
     Node * x = min_element_impl(node->left);
-    if(x == nullptr){
+    if (x == nullptr){
       return node;
     }
-    else{
-      return x;
-    }
-    
+    return x;
     
   }
 
@@ -488,12 +485,10 @@ private:
       return nullptr;
     }
     Node * x = max_element_impl(node->right);
-    if(x == nullptr){
+    if (x == nullptr){
       return node;
     }
-    else{
-      return x;
-    }
+    return x;
   }
 
 
@@ -504,19 +499,17 @@ private:
     if (node == nullptr){
       return true;
     }
-    if (check_sorting_invariant_impl(node->left, less) && less(node->left->datum, node->datum)){
-      return true;
+    if (!check_sorting_invariant_impl(node->left, less) && less(node->left->datum, node->datum)){
+      if (!check_sorting_invariant_impl(node->right, less) && less(node->datum, node->right->datum)){
+        return true;
+      }
+      else{
+        return false;
+      }
     }
     else{
       return false;
     }
-    if (check_sorting_invariant_impl(node->right, less) && less(node->datum, node->right->datum)){
-      return true;
-    }
-    else{
-      return false;
-    }
-
   }
 
   // EFFECTS : Traverses the tree rooted at 'node' using an in-order traversal,
@@ -532,8 +525,9 @@ private:
       return;
     }
     traverse_inorder_impl(node->left, os);
-    std::cout << node->datum << " ";
+    os << node->datum << " ";
     traverse_inorder_impl(node->right, os);
+    return;
   }
 
   // EFFECTS : Traverses the tree rooted at 'node' using a pre-order traversal,
@@ -548,9 +542,10 @@ private:
     if (node == nullptr){
       return;
     }
-    std::cout << node->datum << " ";
+    os << node->datum << " ";
     traverse_inorder_impl(node->left, os);
     traverse_inorder_impl(node->right, os);
+    return;
   }
 
   // EFFECTS : Returns a pointer to the Node containing the smallest element
@@ -570,23 +565,21 @@ private:
     }
     Node * l = min_greater_than_impl(node->left, val, less);
     Node * r = min_greater_than_impl(node->right, val, less);
+    if (l == nullptr){
+      return node;
+    }
     if (less(l->datum, r->datum)){
-      if (!less(l->datum, val)){
+      if (!less(l->datum, val)&& less(val, l->datum)){
         return l;
       }
-      else {
+      else if(!less(node->datum, val) && less(val, node->datum)){
         return node;
       }
-    }
-    else{
-      if(!less(r->datum, val)){
+      else if(!less(r->datum, val) && less(val, r->datum)){
         return r;
       }
-      else {
-        return node;
-      }
     }
-    return node;
+    return nullptr;
   }
 
 
