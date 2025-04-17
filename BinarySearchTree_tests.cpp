@@ -22,7 +22,15 @@ TEST(bst_public_test) {
     tree.insert(7);
     tree.insert(3);
     tree.insert(2);
+    ASSERT_TRUE(*tree.max_element() == 8);
+    ASSERT_TRUE(*tree.min_element() == 4);
+    ASSERT_TRUE(*tree.min_greater_than(7) == 8);
+    ASSERT_TRUE(*tree.min_greater_than(5) == 6);
+    ASSERT_TRUE(*tree.find(4) == 4);
 
+    ASSERT_TRUE(tree.size() == 4);
+    ASSERT_TRUE(tree.height() == 3);
+    ASSERT_TRUE(tree.check_sorting_invariant() == true);
     BinarySearchTree<int>::Iterator it;
   
     ASSERT_TRUE(tree.check_sorting_invariant());
