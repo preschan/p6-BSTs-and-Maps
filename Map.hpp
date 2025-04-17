@@ -74,8 +74,6 @@ public:
   }
 
   ~Map() {
-    BinarySearchTree<Pair_type, PairComp> *bst_ptr = &bst; 
-    delete bst_ptr; 
   }
 
   // EFFECTS : Returns whether this Map is empty.
@@ -99,12 +97,7 @@ public:
   Iterator find(const Key_type& k) const {
     std::pair<Key_type, Value_type> dummy(k, Value_type()); 
     typename BinarySearchTree<Pair_type, PairComp>::Iterator it = bst.find(dummy); 
-    typename BinarySearchTree<Pair_type, PairComp>::Iterator itnull; 
-    if(it!=itnull) {
-      return it;
-    } else {
-      return it; 
-    }
+    return it; 
   }
 
   // MODIFIES: this
@@ -126,7 +119,7 @@ public:
   Value_type& operator[](const Key_type& k) {
     typename BinarySearchTree<Pair_type, PairComp>::Iterator it = find(k); 
     typename BinarySearchTree<Pair_type, PairComp>::Iterator itnull;
-    if(it!=itnull) {
+    if(it==itnull) {
       std::pair<Key_type, Value_type> dummy = {k, Value_type()};
       bst.insert(dummy); 
       return (*find(k)).second;
