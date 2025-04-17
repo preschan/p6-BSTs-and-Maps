@@ -64,10 +64,12 @@ public:
 
   Map &operator=(const Map &rhs) { 
     bst = rhs.bst; 
+    return *this; 
   }
 
   ~Map() {
-    delete bst; 
+    BinarySearchTree<Pair_type, PairComp> *bst_ptr = &bst; 
+    delete bst_ptr; 
   }
 
   // EFFECTS : Returns whether this Map is empty.
@@ -89,8 +91,14 @@ public:
   //       (key, value) pairs, you'll need to construct a dummy value
   //       using "Value_type()".
   Iterator find(const Key_type& k) const {
-    Value_type dummy = Value_type(); 
-    
+    std::pair<Key_type, Value_type> dummy(k, Value_type()); 
+    typename BinarySearchTree<Pair_type, PairComp>::Iterator it = bst.find(dummy); 
+    typename BinarySearchTree<Pair_type, PairComp>::Iterator itnull; 
+    if(it!=itnull) {
+      return it;
+    } else {
+      return it; 
+    }
   }
 
   // MODIFIES: this
@@ -110,7 +118,15 @@ public:
   //
   // HINT: http://www.cplusplus.com/reference/map/map/operator[]/
   Value_type& operator[](const Key_type& k) {
-
+    typename BinarySearchTree<Pair_type, PairComp>::Iterator it = find(k); 
+    typename BinarySearchTree<Pair_type, PairComp>::Iterator itnull;
+    if(it!=itnull) {
+      std::pair<Key_type, Value_type> dummy = {k, Value_type()};
+      bst.insert(dummy); 
+      return (*find(k)).second;
+    } else {
+      return (*find(k)).second; 
+    }
   }
 
   // MODIFIES: this
@@ -122,23 +138,31 @@ public:
   //           an iterator to the newly inserted element, along with
   //           the value true.
   std::pair<Iterator, bool> insert(const Pair_type &val) {
-
+    typename BinarySearchTree<Pair_type, PairComp>::Iterator it = find(val.first);
+    typename BinarySearchTree<Pair_type, PairComp>::Iterator itnull;
+    if(it!=itnull) {
+      return {find(val.first), false};   
+    } else {
+      it = bst.insert(val); 
+      return {it, true};
+    }
   }
 
   // EFFECTS : Returns an iterator to the first key-value pair in this Map.
   Iterator begin() const {
-
+    typename BinarySearchTree<Pair_type, PairComp>::Iterator it = bst.begin(); 
+    return it; 
   }
 
   // EFFECTS : Returns an iterator to "past-the-end".
   Iterator end() const {
-    
+    typename BinarySearchTree<Pair_type, PairComp>::Iterator it = bst.end();
+    return it;  
   }
 
 private:
   // Add a BinarySearchTree private member HERE.
   BinarySearchTree<Pair_type, PairComp> bst;
-   
 };
 
 // You may implement member functions below using an "out-of-line" definition
