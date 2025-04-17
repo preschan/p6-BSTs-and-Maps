@@ -333,7 +333,7 @@ private:
   // NOTE:    This function must run in constant time.
   //          No iteration or recursion is allowed.
   static bool empty_impl(const Node *node) {
-    return (node);
+    return (!node);
   }
 
   // EFFECTS: Returns the size of the tree rooted at 'node', which is the
@@ -459,6 +459,9 @@ private:
   // HINT: You don't need to compare any elements! Think about the
   //       structure, and where the smallest element lives.
   static Node * min_element_impl(Node *node) {
+    if(node == nullptr){
+      return nullptr;
+    }
     if (node->left == nullptr){
       return node;
     }
@@ -474,6 +477,9 @@ private:
   // HINT: You don't need to compare any elements! Think about the
   //       structure, and where the largest element lives.
   static Node * max_element_impl(Node *node) {
+    if(node == nullptr){
+      return nullptr;
+    }
     if (node->right == nullptr){
       return node;
     }

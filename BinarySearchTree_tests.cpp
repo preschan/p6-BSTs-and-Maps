@@ -7,6 +7,13 @@ using namespace std;
 TEST(bst_public_test) {
     BinarySearchTree<int> tree;
     BinarySearchTree<int> tree2;
+    BinarySearchTree<int>::Iterator it;
+    ASSERT_TRUE(tree.min_greater_than(3) == it);
+    ASSERT_TRUE(tree.size() == 0);
+    ASSERT_TRUE(tree.height() == 0);
+    ASSERT_TRUE(tree.min_element() == it);
+    ASSERT_TRUE(tree.max_element() == it);
+    ASSERT_TRUE(tree.empty());
     tree.insert(5);
     tree.insert(6);
     tree.insert(8);
@@ -22,16 +29,15 @@ TEST(bst_public_test) {
     tree.insert(7);
     tree.insert(3);
     tree.insert(2);
-    ASSERT_TRUE(*tree.max_element() == 8);
-    ASSERT_TRUE(*tree.min_element() == 4);
-    ASSERT_TRUE(*tree.min_greater_than(7) == 8);
-    ASSERT_TRUE(*tree.min_greater_than(5) == 6);
-    ASSERT_TRUE(*tree.find(4) == 4);
+    ASSERT_TRUE(*tree2.max_element() == 8);
+    ASSERT_TRUE(*tree2.min_element() == 4);
+    ASSERT_TRUE(*tree2.min_greater_than(7) == 8);
+    ASSERT_TRUE(*tree2.min_greater_than(5) == 6);
+    ASSERT_TRUE(*tree2.find(4) == 4);
 
-    ASSERT_TRUE(tree.size() == 4);
-    ASSERT_TRUE(tree.height() == 3);
-    ASSERT_TRUE(tree.check_sorting_invariant() == true);
-    BinarySearchTree<int>::Iterator it;
+    ASSERT_TRUE(tree2.size() == 4);
+    ASSERT_TRUE(tree2.height() == 3);
+    ASSERT_TRUE(tree2.check_sorting_invariant() == true);
   
     ASSERT_TRUE(tree.check_sorting_invariant());
     ASSERT_TRUE(*tree.max_element() == 8);
@@ -42,6 +48,7 @@ TEST(bst_public_test) {
     ASSERT_TRUE(tree.find(1) == it)
     ASSERT_TRUE(tree.size() == 7);
     ASSERT_TRUE(tree.height() == 4);
+    ASSERT_TRUE(tree.empty() == false);
   
     cout << "cout << tree.to_string()" << endl;
     cout << tree.to_string() << endl << endl;
