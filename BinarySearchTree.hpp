@@ -411,10 +411,10 @@ private:
       return node;
     }
     else if (less(node->datum, query)){
-      return find_impl(node->left, query, less);
+      return find_impl(node->right, query, less);
     }
     else{
-      return find_impl(node->right, query, less);
+      return find_impl(node->left, query, less);
     }
   }
 
@@ -512,13 +512,11 @@ private:
   //       See https://en.wikipedia.org/wiki/Tree_traversal#In-order
   //       for the definition of a in-order traversal.
   static void traverse_inorder_impl(const Node *node, std::ostream &os) {
-    if (node == nullptr){
-      return;
-    }
+    if (node){
     traverse_inorder_impl(node->left, os);
     os << node->datum << " ";
     traverse_inorder_impl(node->right, os);
-    return;
+    }
   }
 
   // EFFECTS : Traverses the tree rooted at 'node' using a pre-order traversal,
@@ -530,13 +528,11 @@ private:
   //       See https://en.wikipedia.org/wiki/Tree_traversal#Pre-order
   //       for the definition of a pre-order traversal.
   static void traverse_preorder_impl(const Node *node, std::ostream &os) {
-    if (node == nullptr){
-      return;
-    }
+    if (node){
     os << node->datum << " ";
-    traverse_inorder_impl(node->left, os);
-    traverse_inorder_impl(node->right, os);
-    return;
+    traverse_preorder_impl(node->left, os);
+    traverse_preorder_impl(node->right, os);
+    }
   }
 
   // EFFECTS : Returns a pointer to the Node containing the smallest element
@@ -551,26 +547,21 @@ private:
   //       'less' parameter). Based on the result, you gain some information
   //       about where the element you're looking for could be.
   static Node * min_greater_than_impl(Node *node, const T &val, Compare less) {
-    if (node == nullptr){
+    if (((!less(node->datum, val) && !less(val, node->datum)) || less(node->datum, val)) && node->right == nullptr){
       return nullptr;
     }
-    Node * l = min_greater_than_impl(node->left, val, less);
-    Node * r = min_greater_than_impl(node->right, val, less);
-    if (l == nullptr){
+    if (less(val,node->datum) && node->left == nullptr){
       return node;
     }
-    if (less(l->datum, r->datum)){
-      if (!less(l->datum, val)&& less(val, l->datum)){
-        return l;
-      }
-      else if(!less(node->datum, val) && less(val, node->datum)){
-        return node;
-      }
-      else if(!less(r->datum, val) && less(val, r->datum)){
-        return r;
-      }
+    if (less(val, node->datum) && ((!less(node->left->datum, val) && !less(val, node->left->datum)) || less(node->left->datum, val))){
+      return node;
     }
-    return nullptr;
+    if (less(node->datum, val) || (!less(node->datum, val) && !less(val, node->datum))){
+      return min_greater_than_impl(node->right, val, less);
+    }
+    else{
+      return min_greater_than_impl(node->left, val, less);
+    }
   }
 
 

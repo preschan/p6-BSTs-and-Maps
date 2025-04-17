@@ -6,12 +6,12 @@ using namespace std;
 
 TEST(bst_public_test) {
     BinarySearchTree<int> tree;
-  
+    BinarySearchTree<int> tree2;
     tree.insert(5);
     tree.insert(6);
     tree.insert(8);
     tree.insert(4);
-
+    tree2 = tree;
   
     ASSERT_TRUE(tree.size() == 4);
     ASSERT_TRUE(tree.height() == 3);
@@ -22,14 +22,16 @@ TEST(bst_public_test) {
     tree.insert(7);
     tree.insert(3);
     tree.insert(2);
+
+    BinarySearchTree<int>::Iterator it;
   
     ASSERT_TRUE(tree.check_sorting_invariant());
     ASSERT_TRUE(*tree.max_element() == 8);
-    ASSERT_TRUE(*tree.min_element() == 3);
+    ASSERT_TRUE(*tree.min_element() == 2);
     ASSERT_TRUE(*tree.min_greater_than(7) == 8);
-    ASSERT_TRUE(*tree.min_greater_than(3) == 8);
+    ASSERT_TRUE(*tree.min_greater_than(3) == 4);
     ASSERT_TRUE(*tree.find(4) == 4);
-    ASSERT_TRUE(tree.find(1) == nullptr);
+    ASSERT_TRUE(tree.find(1) == it)
     ASSERT_TRUE(tree.size() == 7);
     ASSERT_TRUE(tree.height() == 4);
   
