@@ -32,6 +32,12 @@ private:
 
   // A custom comparator
   class PairComp {
+
+    public:
+      Key_compare Key_comparator; 
+      bool operator() (const Pair_type &pair1, const Pair_type &pair2) {
+        return Key_comparator(pair1.first, pair2.first); 
+      }
   };
 
 public:
