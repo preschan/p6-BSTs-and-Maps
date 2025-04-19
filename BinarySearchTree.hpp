@@ -434,8 +434,8 @@ private:
   //       template, NOT according to the < operator. Use the "less"
   //       parameter to compare elements.
   static Node * insert_impl(Node *node, const T &item, Compare less) {
-    Node *z = new Node();
     if(node==nullptr){
+      Node *z = new Node();
       z->datum = item;
       z->left = nullptr;
       z->right = nullptr;
@@ -493,20 +493,35 @@ private:
   //          rooted at 'node'.
   // NOTE:    This function must be tree recursive.
   static bool check_sorting_invariant_impl(const Node *node, Compare less) {
-    if (node == nullptr){
+    if (node == nullptr || (node->left == nullptr && node->right == nullptr)){
       return true;
     }
-    if (!check_sorting_invariant_impl(node->left, less) && less(node->left->datum, node->datum)){
-      if (!check_sorting_invariant_impl(node->right, less) && less(node->datum, node->right->datum)){
+    if (node->left == nullptr){
+      if (check_sorting_invariant_impl(node->right, less) 
+    && less(node->datum, node->right->datum)){
+      return true;
+    }
+    else{
+      return false;
+    }
+    }
+    else if (check_sorting_invariant_impl(node->left, less) 
+    && less(node->left->datum, node->datum)){
+      if(node->right == nullptr){
         return true;
       }
+      if (check_sorting_invariant_impl(node->right, less) 
+    && less(node->datum, node->right->datum)){
+      return true;
+    }
       else{
-        return false;
+      return false;
       }
     }
     else{
       return false;
     }
+    
   }
 
   // EFFECTS : Traverses the tree rooted at 'node' using an in-order traversal,
@@ -556,16 +571,19 @@ private:
     if (node == nullptr){
       return nullptr;
     }
-    if (((!less(node->datum, val) && !less(val, node->datum)) || less(node->datum, val)) && node->right == nullptr){
+    if (((!less(node->datum, val) && !less(val, node->datum)) 
+    || less(node->datum, val)) && node->right == nullptr){
       return nullptr;
     }
     if (less(val,node->datum) && node->left == nullptr){
       return node;
     }
-    if (less(val, node->datum) && ((!less(node->left->datum, val) && !less(val, node->left->datum)) || less(node->left->datum, val))){
+    if (less(val, node->datum) && ((!less(node->left->datum, val) 
+    && !less(val, node->left->datum)) || less(node->left->datum, val))){
       return node;
     }
-    if (less(node->datum, val) || (!less(node->datum, val) && !less(val, node->datum))){
+    if (less(node->datum, val) || (!less(node->datum, val) 
+    && !less(val, node->datum))){
       return min_greater_than_impl(node->right, val, less);
     }
     else{
