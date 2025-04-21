@@ -57,6 +57,14 @@ TEST(map_find_missing) {
     ASSERT_EQUAL(map.find("z"), map.end());
 }
 
+TEST(map_insert_duplicate) {
+    Map<std::string, int> map;
+    map.insert({"x", 42});
+    map.insert({"x", 99}); // Should not insert or change
+    ASSERT_EQUAL(map.size(), 1);
+    ASSERT_EQUAL(map["x"], 42); // Original value preserved
+}
+
 TEST(map_insertion_order_independence) {
     Map<std::string, int> m1, m2;
     m1.insert({"b", 2});
